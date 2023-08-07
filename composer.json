@@ -1,0 +1,9 @@
+{
+    "name": "development/project-1",
+    "description": "development environment",
+    "type": "project",
+    "require": {
+	"slim/slim":"3.*"
+
+    }
+}
