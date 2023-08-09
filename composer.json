@@ -1,9 +1,14 @@
 {
-    "name": "development/project-1",
-    "description": "development environment",
-    "type": "project",
-    "require": {
-	"slim/slim":"3.*"
+	"autoload": {
+		"psr-4": {
+			"x\\": "src/"
+		}
+	}
+	"name": "development/project-1",
+	"description": "development environment",
+	"type": "project",
+	"require": {
+		"slim/slim":"3.*"
 
-    }
+	}
 }
