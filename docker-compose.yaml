@@ -1,0 +1,43 @@
+version: "3"
+services:
+  php-server:
+    container_name: php-container
+    image: php-img
+    build:
+      context: ./
+      dockerfile: DockerfilePHP
+    ports:
+      - "8081:80"
+    volumes:
+      - type: bind
+        source: ./php/www/api_calls
+        target: /var/www/api_calls
+      - type: bind
+        source: ./php/www/book-cover
+        target: /var/www/book-cover
+      - type: bind
+        source: ./php/www/logs
+        target: /var/www/logs
+      - type: bind
+        source: ./php/www/public
+        target: /var/www/public
+      - type: bind
+        source: ./php/www/scripts
+        target: /var/www/scripts
+  flask-server:
+    container_name: flask-container
+    image: flask-img
+    build:
+      context: ./
+      dockerfile: DockerfileFlask
+    ports:
+      - "8080:5000"
+        #restart: always
+    volumes:
+      - type: bind
+        source: ./flask-app/
+        target: /flask-app/
+      - type: bind
+        source: ./build-files/
+        target: /build-files/
+

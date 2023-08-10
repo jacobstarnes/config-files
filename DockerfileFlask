@@ -1,0 +1,44 @@
+# Start with a base Debian image
+FROM python:3.10-slim-buster
+
+# Set the working directory
+WORKDIR /flask-app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	build-essential \
+	cmake \
+	wkhtmltopdf \
+	xvfb \
+	xauth \
+	&& rm -rf /var/lib/apt/lists/*
+#	&& touch app.log
+
+#RUN apt-get update && apt-get install -y gcc g++ build-essential
+
+# install requirements from virtual-env
+COPY  /build-files/requirements.txt ./
+
+RUN pip install -r requirements.txt
+
+# Install Flask, latest bc of --no-cache-dir
+RUN pip install Flask opencv-python imgkit gunicorn
+
+COPY /build-files/models/models/ /root/.insightface/models/
+
+# Expose the Flask API port
+EXPOSE 5000
+
+# Switch to the new user
+#	on the server, create a docker user with appropriate permissions, and execute docker while logged in as docker user.
+#USER 1000:1000
+
+#CMD ["python", "app.py"]
+CMD ["gunicorn","-b","0.0.0.0:5000", "--timeout", "45", "app:app"]
+
+#To build this image:
+# docker build -t flask-image .
+#To build this image into container:
+#docker run -it -d --name flask-container flask-image
+#inswapper_128.onnx stays in folder of execution, which is now app.py calling on a method from face-swap folder
+#To shell in:
+# docker exec -it flask-container bash
